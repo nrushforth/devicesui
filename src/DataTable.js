@@ -1,10 +1,12 @@
 import React , { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Alert } from '@mui/material';
+import { Alert, Box, Container, CssBaseline, TextField, Stack } from '@mui/material';
+import { Button } from '@mui/material';
 
-export default function DataTable() {
+export default function DataTable(props) {
 
   const [Devices, fetchDevices] = useState([])
+  const [filter, setFilter] = useState('');
 
   const getData = () => {
     console.log('getting data');
@@ -20,8 +22,31 @@ export default function DataTable() {
     getData();
   }, [])
 
+const getFilteredData = () => {
+  console.log('getting filtered data');
+  fetch('http://localhost:3000/api/devices?deviceEnergyRating=' + filter)
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res)
+      fetchDevices(res)
+    });
+}
+
+const handleTextFieldChange = (event) => {
+  console.log(event.target.id);
+
+  switch(event.target.id)
+  {
+    case "energyRatingFilter":
+      setFilter(event.target.value);
+      break;
+      default:
+        break;
+  }
+}
+
 const columns = [
-  { field: '_id', headerName: 'ID', width: 70 },
+  { field: '_id', headerName: 'ID', width: 200 },
   { field: 'deviceType', headerName: 'Device Type', width: 130 },
   { field: 'deviceDescription', headerName: 'Description', width: 200 },
   { field: 'deviceOwner', headerName: 'Owner', width: 200 },
@@ -53,22 +78,36 @@ const rows = [
 ];
 
     return (
-        <div style={{padding:'5%', width:'90%'}}>
-            <div style={{ height: 400, width: '100%' }}>
+      <Container component="main" maxWidth="s" sx={{  height:'550px' }}>
+            <CssBaseline />
+            <Stack
+  direction="row"
+  justifyContent="flex-start"
+  alignItems="flex-start"
+  spacing={1}
+>
+                  <TextField id="energyRatingFilter"  label="Filter by Energy Rating" size="small" onChange={handleTextFieldChange} ></TextField>
+                  <Button variant='contained' onClick={getFilteredData}>Filter</Button>
+
+                </Stack>
                 <DataGrid
                      onCellDoubleClick={(params, event) => {
                       alert('Help');
                     }}
-                    onRowClick={(params,event) => { alert('click' + params.id);}
+                    onRowClick={(params,event) => { props.setPage('OTHER_PAGE#' + params.id + '#Update');}
                   }
                 getRowId={row => row._id}  
                 rows={Devices}
                 columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
+                pageSize={10}
+                rowsPerPageOptions={[10]}
                 checkboxSelection     
+                rowHeight={40}
+                sx={{ mt:'10px'}}
                 />
-            </div>
-        </div>
+                <Button onClick={() => { props.setPage('OTHER_PAGE##Add')}} variant='contained'>Add Device</Button>
+            
+            </Container>
+        
   );
 }

@@ -1,5 +1,5 @@
 
-import './App.css';
+
 
 import Main from './Main';
 import AppNavBar from './NavBar';

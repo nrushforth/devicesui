@@ -4,17 +4,21 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Autocomplete from "@mui/material/Autocomplete";
-import { ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { FormTheme } from "./FormTheme";
 import { Card } from "@mui/material";
 import { CardContent } from "@mui/material";
 import { Paper } from "@mui/material";
-import { SentimentSatisfiedAltSharp } from "@material-ui/icons";
+import { Grid } from "@mui/material";
+import { Box } from "@mui/material";
+import { Container } from "@mui/material";
+import { CssBaseline } from "@mui/material";
+import { KeyboardReturnOutlined } from "@material-ui/icons";
+
+
 //import { developers } from "./Store/Store";
 
-const formStyle = {
-  maxWidth: 500
-}
+const theme = createTheme();
 
 const DeviceForm = (props) => {
   const [device, fetchDevice] = useState(null);
@@ -23,13 +27,14 @@ const DeviceForm = (props) => {
   const [deviceDescription, setDeviceDescription] = useState('');
   const [deviceOwner, setDeviceOwner] = useState('');
   const [deviceSerialNumber, setDeviceSerialNumber] = useState('');
+  const [deviceEnergyRating, setDeviceEnergyRating] = useState('');  
   const [deviceLocation, setDeviceLocation] = useState('');
-  const [deviceInstalledDate, setDeviceInstalledDate] = useState('');
-  const [deviceRemovedDate, setDeviceRemovedDate] = useState('');
+  const [deviceInstalled, setDeviceInstalled] = useState('');
+  const [deviceRemoved, setDeviceRemoved] = useState('');
 
   const getData = () => {
     console.log('getting data');
-    fetch('http://localhost:3000/api/devices/62349d220aeb6f389a4a4b77')
+    fetch('http://localhost:3000/api/devices/' + props.id)
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
@@ -37,8 +42,24 @@ const DeviceForm = (props) => {
       });
   }
 
+  
+
   useEffect(() => {
+    if (props.mode === 'Update')
+    {
     getData();
+    }
+    else
+    {
+      setFields({ "deviceType": "",
+      "deviceDescription": "",
+      "deviceOwner": "",
+      "deviceSerialNumber": "",
+      "deviceEnergyRating": 1,
+      "deviceInstalled": "",
+      "deviceRemoved": "",
+      "deviceLocation": ""});
+    }
   }, [])
 
    
@@ -46,14 +67,22 @@ const DeviceForm = (props) => {
   const setFields = (device) =>
   {    
     fetchDevice(device);
+
     setDeviceDescription(device.deviceDescription);
     setDeviceType(device.deviceType);
     setDeviceOwner(device.deviceOwner);
     setDeviceSerialNumber(device.deviceSerialNumber);
+    setDeviceEnergyRating(device.deviceEnergyRating);
+    setDeviceLocation(device.deviceLocation);
+    setDeviceInstalled(device.deviceInstalled);
+    setDeviceRemoved(device.deviceRemoved);
+    console.log('setting data');
+    console.log(device.deviceLocation);
   }
 
   const handleTextFieldChange = (event) => {
     console.log(event.target.id);
+    console.log(device);
     switch(event.target.id)
     {
       case "description":
@@ -65,19 +94,67 @@ const DeviceForm = (props) => {
       case "serialNumber":
         setDeviceSerialNumber(event.target.value);
         break;
+      case "energyRating":
+          setDeviceEnergyRating(event.target.value);
+          break;            
       case "location":
         setDeviceLocation(event.target.value);
         break;    
       case "installedDate":
-        setDeviceInstalledDate(event.target.value);
+        setDeviceInstalled(event.target.value);
         break;                               
       case "removedDate":
-        setDeviceRemovedDate(event.target.value);
+        setDeviceRemoved(event.target.value);
         break;                               
       default:
         break;
     };
   }
+
+  const handleCancel = (event) => {
+    props.setPage("MAIN_PAGE");
+  }
+
+  const handleSubmit = (event) => {
+    console.log('saving data');
+
+    device.deviceLocation = deviceLocation;
+
+    const newDevice = { "deviceType": deviceType,
+    "deviceDescription": deviceDescription,
+    "deviceOwner": deviceOwner,
+    "deviceSerialNumber": deviceSerialNumber,
+    "deviceEnergyRating": deviceEnergyRating,
+    "deviceInstalled": deviceInstalled,
+    "deviceRemoved": deviceRemoved,
+    "deviceLocation": deviceLocation};
+
+    const contentLength = JSON.stringify(newDevice).length;
+
+    console.log(newDevice);
+    console.log(contentLength);
+
+
+    fetch('http://localhost:3000/api/devices/' + (props.mode === 'Add' ? '' : props.id) ,
+    { method: (props.mode === 'Add' ? 'POST' : 'PUT'), 
+      
+      credentials: 'same-origin',
+      headers: {  'content-type': 'application/json', 
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+                  'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',                  
+                  'Content-Length' : contentLength.toString(),
+      },
+      body: JSON.stringify(newDevice),
+  
+    })
+      .then((res) => res.text())
+      .then((res) => {
+        console.log(res);        
+      }).catch((error) => {console.log(error);});
+
+      props.setPage("MAIN_PAGE");
+  };
 
   const deviceTypeOptions = ["Laptop", "Monitor", "Printer", "Photocopier", "Other",""];
 
@@ -97,44 +174,83 @@ const DeviceForm = (props) => {
   // }, [devName, devTech, devWork]);
 
   return ( 
-    <ThemeProvider theme={FormTheme}>
-      { device &&
-    <form style={formStyle}>
-      <Paper elevation={3}>
-      <Typography variant="h6">Device Information:</Typography>
-      <Autocomplete size="small" sx={{width:300}}
-        options={deviceTypeOptions}
-        getOptionLabel={(option) => option}
-        renderInput={(params) => {
-          return (
-            <TextField
-              {...params}
-              variant="outlined"
-              label="Device Type"
+    <ThemeProvider theme={theme}>
+       { device && 
+      <Container component="main" maxWidth="xs" >
+        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+        <Typography component="h1" variant="h5">
+           { props.mode } Device Information
+        </Typography>
+        <Typography component="h1" variant="h6">
+           { props.id }
+        </Typography>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} >
+
+            <Autocomplete size="small" fullWidth
+              options={deviceTypeOptions}
+              getOptionLabel={(option) => option}
+              renderInput={(params) => {
+                return (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Device Type"
+                  />
+                );
+              }}
+              inputValue={device.deviceType}
+              value={deviceType}
+              onInputChange={handleInputAutoCompleteChange} 
+              onChange={handleAutoCompleteChange}
             />
-          );
-        }}
-        inputValue={device.deviceType}
-        value={deviceType}
-        onInputChange={handleInputAutoCompleteChange} 
-        onChange={handleAutoCompleteChange}
-      />
-      <Stack >
-      <TextField id="description" value={deviceDescription} label="Device Description" variant="outlined" size="small" sx={{width:450}} onChange={handleTextFieldChange} />        
-      <TextField id="owner" value={deviceOwner} label="Device Owner" variant="outlined" size="small" sx={{width:300}} onChange={handleTextFieldChange} />
+          </Grid>
+          <Grid item xs={12} sm={6} >
+            <TextField id="owner" value={deviceOwner} label="Device Owner" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
+          </Grid>
+          <Grid item xs={12}>      
+            <TextField id="description" value={deviceDescription} label="Device Description" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />        
+          </Grid>
 
-      <TextField id="serialNumber" value={deviceSerialNumber} label="Device Serial Number" variant="outlined" size="small" sx={{width:300}} onChange={handleTextFieldChange} />
-      <TextField id="location" value={deviceLocation} label="Device Location" variant="outlined" size="small" sx={{width:300}} onChange={handleTextFieldChange} />
-      <TextField id="installedDate" value={deviceInstalledDate} label="Device Installed Date" variant="outlined" size="small" sx={{width:300}} onChange={handleTextFieldChange} />
-      <TextField id="removedDate" value={deviceRemovedDate} label="Device Removed" variant="outlined" size="small" sx={{width:300}} onChange={handleTextFieldChange} />
-      </Stack>
-      <Stack direction='column' sx={{justifyContent: 'space-between', alignItems: 'flex-end'}}>
-   
-      <Button variant='contained' onClick={() => { props.setPage(''); }} >Save</Button>
-      </Stack>
+          <Grid item xs={12}>                    
+            <TextField id="serialNumber" value={deviceSerialNumber} label="Device Serial Number" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
+          </Grid>
+          <Grid item xs={12} sm={6}>                    
+            <TextField id="energyRating" value={deviceEnergyRating} label="Device Energy Rating" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
+          </Grid>
+          <Grid item xs={12} sm={6}>                    
+            <TextField id="location" value={deviceLocation} label="Device Location" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
+          </Grid>
+          <Grid item xs={12}>                    
+            <TextField id="installedDate" value={deviceInstalled} label="Device Installed Date" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
+          </Grid>
+          <Grid item xs={12}>                    
+            <TextField id="removedDate" value={deviceRemoved} label="Device Removed" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} >
+        <Button variant='contained'  sx={{ mt: 3, mb: 2 }} fullWidth onClick={handleCancel}>Cancel</Button>      
+        </Grid>          
+        <Grid item xs={12} sm={6} >          
+        <Button variant='contained'  sx={{ mt: 3, mb: 2 }} fullWidth onClick={handleSubmit}>Save</Button>      
+        </Grid>
+
+        </Grid>
+      </Box>
+      </Box>
       </Paper>
-
-    </form> }
+      </Container> }
     </ThemeProvider> 
   );
 };

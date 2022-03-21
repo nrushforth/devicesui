@@ -1,27 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
 import DataTable from './DataTable';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 function Home(props) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload. ????!!!!?????
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Button onClick={() => { props.setPage('OTHER_PAGE')}} variant='contained'>Hello World</Button>
-        <DataTable/>        
-      </header>
+    <div>
+      
+        
+        {/* <Button onClick={() => { props.setPage('OTHER_PAGE#62386f0b3773efcaf46fdd19#Update')}} variant='contained'>Hello World</Button> */}
+        <Typography component="div" variant="h4" >&nbsp;&nbsp;LBG Devices</Typography>
+        <DataTable setPage={ props.setPage } />        
+      
     </div>
   );
 }
