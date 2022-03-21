@@ -24,7 +24,7 @@ export default function DataTable(props) {
 
 const getFilteredData = () => {
   console.log('getting filtered data');
-  fetch('http://localhost:3000/api/devices?deviceEnergyRating=' + filter)
+  fetch('http://localhost:3000/api/devices' +  (filter !== null && filter != '' ? '?deviceEnergyRating=' + filter : ''))
     .then((res) => res.json())
     .then((res) => {
       console.log(res)
@@ -80,11 +80,7 @@ const rows = [
     return (
       <Container component="main" maxWidth="s" sx={{  height:'550px' }}>
             <CssBaseline />
-            <Stack
-  direction="row"
-  justifyContent="flex-start"
-  alignItems="flex-start"
-  spacing={1}
+            <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}
 >
                   <TextField id="energyRatingFilter"  label="Filter by Energy Rating" size="small" onChange={handleTextFieldChange} ></TextField>
                   <Button variant='contained' onClick={getFilteredData}>Filter</Button>
@@ -105,7 +101,7 @@ const rows = [
                 rowHeight={40}
                 sx={{ mt:'10px'}}
                 />
-                <Button onClick={() => { props.setPage('OTHER_PAGE##Add')}} variant='contained'>Add Device</Button>
+                <Button sx={{ mt:'10px'}} onClick={() => { props.setPage('OTHER_PAGE##Add')}} variant='contained'>Add Device</Button>
             
             </Container>
         
