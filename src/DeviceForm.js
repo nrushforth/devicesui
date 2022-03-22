@@ -8,7 +8,7 @@ import { Paper } from "@mui/material";
 import { Grid } from "@mui/material";
 import { Box } from "@mui/material";
 import { Container } from "@mui/material";
-import { CssBaseline } from "@mui/material";
+
 
 
 
@@ -28,9 +28,9 @@ const DeviceForm = (props) => {
   const [deviceInstalled, setDeviceInstalled] = useState('');
   const [deviceRemoved, setDeviceRemoved] = useState('');
 
-  const getData = () => {
+  async function getData() {
     console.log('getting data');
-    fetch('http://localhost:3000/api/devices/' + props.id)
+    await fetch('http://localhost:3000/api/devices/' + props.id)
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
@@ -111,7 +111,7 @@ const DeviceForm = (props) => {
     props.setPage("MAIN_PAGE");
   }
 
-  const handleSubmit = (event) => {
+  async function handleSubmit() {
     console.log('saving data');
 
     device.deviceLocation = deviceLocation;
@@ -131,7 +131,7 @@ const DeviceForm = (props) => {
     console.log(contentLength);
 
 
-    fetch('http://localhost:3000/api/devices/' + (props.mode === 'Add' ? '' : props.id) ,
+    await fetch('http://localhost:3000/api/devices/' + (props.mode === 'Add' ? '' : props.id) ,
     { method: (props.mode === 'Add' ? 'POST' : 'PUT'), 
       
       credentials: 'same-origin',
@@ -150,31 +150,58 @@ const DeviceForm = (props) => {
       }).catch((error) => {console.log(error);});
 
       props.setPage("MAIN_PAGE");
-  };
+  }
 
   const deviceTypeOptions = ["Laptop", "Monitor", "Printer", "Photocopier", "Other",""];
+  const deviceEnergyRatings = ["A", "B", "C", "D", "E", "F", "G",""];
 
   const handleAutoCompleteChange = (event, value) => {
     console.log(value);
-    setDeviceType(value);    
+    if (value !== '')
+      setDeviceType(value);    
   }
 
   const handleInputAutoCompleteChange = (event, value) => {
-    console.log(value);    
-    device.deviceType = value;
-    setDeviceType(deviceTypeOptions[0]);    
+    console.log(value); 
+    if (value !== '')
+    {   
+      device.deviceType = value;
+      setDeviceType(device.deviceType);    
+    }
+  };
+
+  const handleDeviceEnergyRatingAutoCompleteChange = (event, value) => {
+    console.log('handleDeviceEnergyRatingAutoCompleteChange ' + value);
+    console.log(device.deviceEnergyRating);   
+    if (value !== '')
+      setDeviceEnergyRating(value);    
   }
 
-  const handleDelete = (event, value) => {
-    alert('Are you sure?');
-    console.log('deleteing data');
-    fetch('http://localhost:3000/api/devices/' + props.id,
-    { method: (props.mode === 'Add' ? 'POST' : 'PUT'), })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log(res);      
-    });
-  }
+  const handleDeviceEnergyRatingInputAutoCompleteChange = (event, value) => {
+    console.log('handleDeviceEnergyRatingInputAutoCompleteChange ' + value); 
+    console.log(device.deviceEnergyRating);   
+    if (value !== '')
+    {
+      device.deviceEnergyRating = value;
+      setDeviceEnergyRating(device.deviceEnergyRating);    
+    }
+  };
+
+  async function handleDelete() {
+    if (window.confirm('Are you sure you want to delete the device?'))
+    {
+      console.log('deleteing data');
+      
+      await fetch('http://localhost:3000/api/devices/' + props.id,
+      { method: 'DELETE', })
+      .then((res) => res.text())
+      .then((res) => {
+        console.log(res);        
+      }).catch((error) => {console.log(error);});
+
+      props.setPage("MAIN_PAGE");
+    } 
+  };
   // const handleButtonClick = useCallback(() => {
   //   developers.push({name: devName, tech: devTech, work: devWork});
   // }, [devName, devTech, devWork]);
@@ -183,8 +210,8 @@ const DeviceForm = (props) => {
     <ThemeProvider theme={theme}>
        { device && 
       <Container component="main" maxWidth="xs" >
-        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-        <CssBaseline />
+        <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+        
         <Box
           sx={{
             marginTop: 0,
@@ -232,7 +259,24 @@ const DeviceForm = (props) => {
             <TextField id="serialNumber" value={deviceSerialNumber} label="Device Serial Number" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
           </Grid>
           <Grid item xs={12} sm={6}>                    
-            <TextField id="energyRating" value={deviceEnergyRating} label="Device Energy Rating" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
+            {/* <TextField id="energyRating" value={deviceEnergyRating} label="Device Energy Rating" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} /> */}
+            <Autocomplete size="small" fullWidth
+              options={deviceEnergyRatings}
+              getOptionLabel={(option) => option}
+              renderInput={(params) => {
+                return (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Device Energy Rating"
+                  />
+                );
+              }}
+              inputValue={device.deviceEnergyRating}
+              value={deviceEnergyRating}
+              onInputChange={handleDeviceEnergyRatingInputAutoCompleteChange} 
+              onChange={handleDeviceEnergyRatingAutoCompleteChange}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>                    
             <TextField id="location" value={deviceLocation} label="Device Location" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />

@@ -1,6 +1,6 @@
 import React , { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Container, CssBaseline, TextField, Stack } from '@mui/material';
+import { DataGrid, GridValueFormatterParams } from '@mui/x-data-grid';
+import { Container, CssBaseline, Paper, TextField, Stack } from '@mui/material';
 import { Button } from '@mui/material';
 
 export default function DataTable(props) {
@@ -45,23 +45,44 @@ const handleTextFieldChange = (event) => {
   }
 }
 
+function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
+}
+
+function formatDate(date) {
+  console.log(date);
+  return [
+    padTo2Digits(date.substring(8,10)),
+    padTo2Digits(date.substring(5,7)),
+    date.substring(0,4)].join('/');
+}
+
 const columns = [
   { field: '_id', headerName: 'ID', width: 200, hide: true },
   { field: 'deviceType', headerName: 'Device Type', width: 130 },
-  { field: 'deviceDescription', headerName: 'Description', width: 200 },
-  { field: 'deviceOwner', headerName: 'Owner', width: 200 },
+  { field: 'deviceDescription', headerName: 'Description', width: 250 },
+  { field: 'deviceOwner', headerName: 'Owner', width: 150 },
   { field: 'deviceSerialNumber', headerName: 'Serial Number', width: 150 },
   {
     field: 'deviceEnergyRating',
-    headerName: 'Energy Rating',
-    type: 'number',
-    width: 150,
+    headerName: 'Energy Rating',    
+    width: 120,
   },
   {
     field: 'deviceLocation',
     headerName: 'Location',
     description: 'xxxxxxxxxxxx',
-    width: 160,
+    width: 120,
+  },
+  {
+    field: 'deviceInstalled',
+    headerName: 'Installed Date ',
+    description: 'xxxxxxxxxxxx',
+    width: 120,
+    valueFormatter: (params) => {
+      const valueFormatted = formatDate(params.value);
+      return `${valueFormatted}`;
+    }
   },
   // {
   //     headerName: 'Click',
@@ -86,10 +107,39 @@ const columns = [
 // ];
 
     return (
-      <Container component="main" maxWidth="s" sx={{  height:'550px' }}>
-            <CssBaseline />
-            <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}
->
+      <Paper elevation={3} sx={{  height:'650px', m:'15px', pt:'20px', pb:'20px' }} >   
+      <Container component="main" maxWidth="s" sx={{  height:'550px',
+     '& .A': {
+      backgroundColor: '#107e40',
+      color: '#ffffff',
+    },
+    '& .B': {
+      backgroundColor: '#329e31',
+      color: '#ffffff',
+    },
+    '& .C': {
+      backgroundColor: '#92c947',
+      color: '#ffffff',
+    },
+    '& .D': {
+      backgroundColor: '#fef035',
+      color: '#ffffff',
+    },
+    '& .E': {
+      backgroundColor: '#f4ae34',
+      color: '#ffffff',
+    },    
+    '& .F': {
+      backgroundColor: '#eb6930',
+      color: '#ffffff',
+    },
+    '& .G': {
+      backgroundColor: '#e0202c',
+      color: '#ffffff',
+    },
+    }}>
+                
+            <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
                   <TextField id="energyRatingFilter"  label="Filter by Energy Rating" size="small" onChange={handleTextFieldChange} ></TextField>
                   <Button variant="contained" color="success" onClick={getFilteredData}>Filter</Button>
 
@@ -101,6 +151,10 @@ const columns = [
                     onRowClick={(params,event) => { props.setPage('OTHER_PAGE#' + params.id + '#Update');}
                   }
                 getRowId={row => row._id}  
+                getCellClassName={(params) => {
+                  if (params.field === 'deviceEnergyRating')
+                  return params.value;
+                }}
                 rows={Devices}
                 columns={columns}
                 pageSize={10}
@@ -110,8 +164,9 @@ const columns = [
                 sx={{ mt:'10px'}}
                 />
                 <Button sx={{ mt:'10px'}} onClick={() => { props.setPage('OTHER_PAGE##Add')}} variant="contained" color="success">Add Device</Button>
-            
+                
             </Container>
+            </Paper> 
         
   );
 }

@@ -32,7 +32,7 @@ export default function AppNavBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            LBG Device Management Portal
+            Lloyds Device Management Portal
           </Typography>
           <Button variant="contained" color="success" onClick={handleButtonClick}>{login}</Button>
         </Toolbar>
