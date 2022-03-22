@@ -1,8 +1,5 @@
 import logo from './OIP.png';
-
 import './App.css';
-import DataTable from './DataTable';
-import { Button, Typography } from '@mui/material';
 
 function Open(props) {
   return (

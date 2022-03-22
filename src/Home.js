@@ -1,7 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
 import DataTable from './DataTable';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 function Home(props) {
   return (
