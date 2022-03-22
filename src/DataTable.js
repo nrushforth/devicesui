@@ -46,7 +46,7 @@ const handleTextFieldChange = (event) => {
 }
 
 const columns = [
-  { field: '_id', headerName: 'ID', width: 200 },
+  { field: '_id', headerName: 'ID', width: 200, hide: true },
   { field: 'deviceType', headerName: 'Device Type', width: 130 },
   { field: 'deviceDescription', headerName: 'Description', width: 200 },
   { field: 'deviceOwner', headerName: 'Owner', width: 200 },
@@ -63,6 +63,14 @@ const columns = [
     description: 'xxxxxxxxxxxx',
     width: 160,
   },
+  // {
+  //     headerName: 'Click',
+  //     width: 90,
+  //     renderCell: (params) => (
+  //     // you will find row info in params
+  //     <Button variant='contained' size='small' color='success' onClick={(params) => { alert('delete ' + params.id ); }}>DELETE</Button>
+  //     ),
+  // },
 ];
 
 const rows = [
@@ -83,7 +91,7 @@ const rows = [
             <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}
 >
                   <TextField id="energyRatingFilter"  label="Filter by Energy Rating" size="small" onChange={handleTextFieldChange} ></TextField>
-                  <Button variant='contained' onClick={getFilteredData}>Filter</Button>
+                  <Button variant="contained" color="success" onClick={getFilteredData}>Filter</Button>
 
                 </Stack>
                 <DataGrid
@@ -101,7 +109,7 @@ const rows = [
                 rowHeight={40}
                 sx={{ mt:'10px'}}
                 />
-                <Button sx={{ mt:'10px'}} onClick={() => { props.setPage('OTHER_PAGE##Add')}} variant='contained'>Add Device</Button>
+                <Button sx={{ mt:'10px'}} onClick={() => { props.setPage('OTHER_PAGE##Add')}} variant="contained" color="success">Add Device</Button>
             
             </Container>
         

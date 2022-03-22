@@ -55,7 +55,7 @@ const DeviceForm = (props) => {
       "deviceDescription": "",
       "deviceOwner": "",
       "deviceSerialNumber": "",
-      "deviceEnergyRating": 1,
+      "deviceEnergyRating": "",
       "deviceInstalled": "",
       "deviceRemoved": "",
       "deviceLocation": ""});
@@ -169,6 +169,9 @@ const DeviceForm = (props) => {
     setDeviceType(deviceTypeOptions[0]);    
   }
 
+  const handleDelete = (event, value) => {
+    alert('Are you sure?');
+  }
   // const handleButtonClick = useCallback(() => {
   //   developers.push({name: devName, tech: devTech, work: devWork});
   // }, [devName, devTech, devWork]);
@@ -240,12 +243,15 @@ const DeviceForm = (props) => {
         </Grid>
         <Grid container spacing={2}>
         <Grid item xs={12} sm={6} >
-        <Button variant='contained'  sx={{ mt: 3, mb: 2 }} fullWidth onClick={handleCancel}>Cancel</Button>      
+        <Button variant="contained" color="success"  sx={{ mt: 3, mb: 1 }} fullWidth onClick={handleCancel}>Cancel</Button>      
         </Grid>          
         <Grid item xs={12} sm={6} >          
-        <Button variant='contained'  sx={{ mt: 3, mb: 2 }} fullWidth onClick={handleSubmit}>Save</Button>      
+        <Button variant="contained" color="success"  sx={{ mt: 3, mb: 1 }} fullWidth onClick={handleSubmit}>Save</Button>      
         </Grid>
-
+        { props.mode === 'Update' &&
+        <Grid item xs={12}>                    
+            <Button variant="contained" color="error"  sx={{ mt: 0, mb: 0 }} fullWidth onClick={handleDelete}>Delete</Button>      
+          </Grid> }
         </Grid>
       </Box>
       </Box>
