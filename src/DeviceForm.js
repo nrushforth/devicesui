@@ -167,6 +167,13 @@ const DeviceForm = (props) => {
 
   const handleDelete = (event, value) => {
     alert('Are you sure?');
+    console.log('deleteing data');
+    fetch('http://localhost:3000/api/devices/' + props.id,
+    { method: (props.mode === 'Add' ? 'POST' : 'PUT'), })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res);      
+    });
   }
   // const handleButtonClick = useCallback(() => {
   //   developers.push({name: devName, tech: devTech, work: devWork});
