@@ -78,6 +78,7 @@ const DeviceForm = (props) => {
 
   const handleTextFieldChange = (event) => {
     console.log(event.target.id);
+    console.log(event.target.value);
     console.log(device);
     switch(event.target.id)
     {
@@ -282,10 +283,10 @@ const DeviceForm = (props) => {
             <TextField id="location" value={deviceLocation} label="Device Location" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
           </Grid>
           <Grid item xs={12}>                    
-            <TextField id="installedDate" value={deviceInstalled} label="Device Installed Date" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
+            <TextField id="installedDate" value={deviceInstalled.substring(0,10)} label="Device Installed Date (YYYY-MM-DD)" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
           </Grid>
           <Grid item xs={12}>                    
-            <TextField id="removedDate" value={deviceRemoved} label="Device Removed" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
+            <TextField id="removedDate" value={(deviceRemoved !== null ? deviceRemoved.substring(0,10) : '')} label="Device Removed Date (YYYY-MM-DD)" variant="outlined" size="small" fullWidth onChange={handleTextFieldChange} />
           </Grid>
         </Grid>
         <Grid container spacing={2}>

@@ -112,30 +112,37 @@ const columns = [
      '& .A': {
       backgroundColor: '#107e40',
       color: '#ffffff',
+      fontWeight:"bold",
     },
     '& .B': {
       backgroundColor: '#329e31',
       color: '#ffffff',
+      fontWeight:"bold",
     },
     '& .C': {
       backgroundColor: '#92c947',
       color: '#ffffff',
+      fontWeight:"bold",
     },
     '& .D': {
       backgroundColor: '#fef035',
       color: '#ffffff',
+      fontWeight:"bold",
     },
     '& .E': {
       backgroundColor: '#f4ae34',
       color: '#ffffff',
+      fontWeight:"bold",
     },    
     '& .F': {
       backgroundColor: '#eb6930',
       color: '#ffffff',
+      fontWeight:"bold",
     },
     '& .G': {
       backgroundColor: '#e0202c',
       color: '#ffffff',
+      fontWeight:"bold",
     },
     }}>
                 
