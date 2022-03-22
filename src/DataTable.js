@@ -8,9 +8,9 @@ export default function DataTable(props) {
   const [Devices, fetchDevices] = useState([])
   const [filter, setFilter] = useState('');
 
-  const getData = () => {
+ async function getData() {
     console.log('getting data');
-    fetch('http://localhost:3000/api/devices')
+    await fetch('http://localhost:3000/api/devices')
       .then((res) => res.json())
       .then((res) => {
         console.log(res)
@@ -22,14 +22,19 @@ export default function DataTable(props) {
     getData();
   }, [])
 
-const getFilteredData = () => {
-  console.log('getting filtered data');
-  fetch('http://localhost:3000/api/devices' +  (filter !== null && filter !== '' ? '?deviceEnergyRating=' + filter : ''))
+async function getFilteredData()  {
+  console.log('getting filtered data ' + filter);
+  await fetch('http://localhost:3000/api/devices' +  (filter !== null && filter !== '' ? '?deviceEnergyRating=' + filter : ''))
     .then((res) => res.json())
     .then((res) => {
       console.log(res)
       fetchDevices(res)
     });
+}
+
+async function clearFilter() {
+  setFilter('');
+   getData();
 }
 
 const handleTextFieldChange = (event) => {
@@ -50,7 +55,6 @@ function padTo2Digits(num) {
 }
 
 function formatDate(date) {
-  console.log(date);
   return [
     padTo2Digits(date.substring(8,10)),
     padTo2Digits(date.substring(5,7)),
@@ -144,12 +148,17 @@ const columns = [
       color: '#ffffff',
       fontWeight:"bold",
     },
-    }}>
+    '& .MuiDataGrid-columnHeaders': {
+      backgroundColor: "rgba(225,225,225,0.5)",
+      fontWeight: "bold",
+      color: '#333333'
+    },}
+  }>
                 
             <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-                  <TextField id="energyRatingFilter"  label="Filter by Energy Rating" size="small" onChange={handleTextFieldChange} ></TextField>
+                  <TextField value={filter} id="energyRatingFilter"  label="Filter by Energy Rating" size="small" onChange={handleTextFieldChange} ></TextField>
                   <Button variant="contained" color="success" onClick={getFilteredData}>Filter</Button>
-
+                  <Button variant="contained" color="success" onClick={clearFilter}>Clear Filter</Button>
                 </Stack>
                 <DataGrid
                      onCellDoubleClick={(params, event) => {

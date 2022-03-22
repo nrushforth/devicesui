@@ -296,14 +296,19 @@ const DeviceForm = (props) => {
         <Grid item xs={12} sm={6} >          
         <Button variant="contained" color="success"  sx={{ mt: 3, mb: 1 }} fullWidth onClick={handleSubmit}>Save</Button>      
         </Grid>
-        { props.mode === 'Update' &&
-        <Grid item xs={12}>                    
-            <Button variant="contained" color="error"  sx={{ mt: 0, mb: 0 }} fullWidth onClick={handleDelete}>Delete</Button>      
-          </Grid> }
+
         </Grid>
       </Box>
       </Box>
       </Paper>
+      { props.mode === 'Update' &&
+      <Paper elevation={3} sx={{  p: { xs: 2, md: 2 }, my: -3}}>
+      
+        <Grid item xs={12}>                    
+            <Button variant="contained" color="error"  sx={{ mt: 0, mb: 0 }} fullWidth onClick={handleDelete}>Delete</Button>      
+          </Grid> 
+       
+        </Paper> }
       </Container> }
     </ThemeProvider> 
   );
