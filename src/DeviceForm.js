@@ -209,7 +209,7 @@ const DeviceForm = (props) => {
   return ( 
     <ThemeProvider theme={theme}>
        { device && 
-      <Container component="main" maxWidth="xs" >
+      <Container component="main" maxWidth="s" >
         <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
         
         <Box
@@ -220,10 +220,10 @@ const DeviceForm = (props) => {
             alignItems: 'center',
           }}
         >
-        <Typography component="h1" variant="h5">
-           { props.mode } Device Information
+        <Typography component="h1" variant="h7" sx={{color:'#666666'}}>
+           { props.mode } Device
         </Typography>
-        <Typography component="h1" variant="h6">
+        <Typography component="h2" variant="caption">
            { props.id }
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>

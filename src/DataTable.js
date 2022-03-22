@@ -59,7 +59,7 @@ function formatDate(date) {
 
 const columns = [
   { field: '_id', headerName: 'ID', width: 200, hide: true },
-  { field: 'deviceType', headerName: 'Device Type', width: 130 },
+  { field: 'deviceType', headerName: 'Device Type', width: 110 },
   { field: 'deviceDescription', headerName: 'Description', width: 250 },
   { field: 'deviceOwner', headerName: 'Owner', width: 150 },
   { field: 'deviceSerialNumber', headerName: 'Serial Number', width: 150 },

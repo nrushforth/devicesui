@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { Menu as MenuIcon } from '@material-ui/icons';
+import DevicesOtherIcon from '@material-ui/icons/DevicesOther';
 
 export default function AppNavBar(props) {
 
@@ -26,10 +27,11 @@ export default function AppNavBar(props) {
             size="large"
             edge="start"
             color="inherit"
-            aria-label="menu"
+            aria-label="devicesothericon"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            <DevicesOtherIcon fontSize='large'/>
+            {/* <MenuIcon /> */}
           </IconButton>
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             Lloyds Device Management Portal
