@@ -9,11 +9,11 @@ export default function DataTable(props) {
   const [filter, setFilter] = useState('');
 
  async function getData() {
-    console.log('getting data');
+    //console.log('getting data');
     await fetch('http://localhost:3000/api/devices')
       .then((res) => res.json())
       .then((res) => {
-        console.log(res)
+        //console.log(res)
         fetchDevices(res)
       });
   }
@@ -23,11 +23,11 @@ export default function DataTable(props) {
   }, [])
 
 async function getFilteredData()  {
-  console.log('getting filtered data ' + filter);
+  //console.log('getting filtered data ' + filter);
   await fetch('http://localhost:3000/api/devices' +  (filter !== null && filter !== '' ? '?deviceEnergyRating=' + filter : ''))
     .then((res) => res.json())
     .then((res) => {
-      console.log(res)
+      //console.log(res)
       fetchDevices(res)
     });
 }
@@ -38,7 +38,7 @@ async function clearFilter() {
 }
 
 const handleTextFieldChange = (event) => {
-  console.log(event.target.id);
+  //console.log(event.target.id);
 
   switch(event.target.id)
   {
@@ -150,8 +150,12 @@ const columns = [
     },
     '& .MuiDataGrid-columnHeaders': {
       backgroundColor: "rgba(225,225,225,0.5)",
-      fontWeight: "bold",
+      fontWeight: "900",
       color: '#333333'
+    },
+    '& .MuiDataGrid-columnHeaderTitle': {
+      fontWeight: "bold",
+      color: '#777777'
     },}
   }>
                 

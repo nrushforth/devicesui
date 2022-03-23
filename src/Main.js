@@ -12,9 +12,9 @@ function Main(){
 
     let pageProps = page.split('#');
 
-    console.log(pageProps[0]);
-    console.log(pageProps[1]);
-    console.log(pageProps[2]);
+    //console.log(pageProps[0]);
+    //console.log(pageProps[1]);
+    //console.log(pageProps[2]);
 
     return(
       

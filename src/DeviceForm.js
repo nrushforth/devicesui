@@ -29,11 +29,11 @@ const DeviceForm = (props) => {
   const [deviceRemoved, setDeviceRemoved] = useState('');
 
   async function getData() {
-    console.log('getting data');
+    //console.log('getting data');
     await fetch('http://localhost:3000/api/devices/' + props.id)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setFields(res);
       });
   }
@@ -72,14 +72,14 @@ const DeviceForm = (props) => {
     setDeviceLocation(device.deviceLocation);
     setDeviceInstalled(device.deviceInstalled);
     setDeviceRemoved(device.deviceRemoved);
-    console.log('setting data');
-    console.log(device.deviceLocation);
+    //console.log('setting data');
+    //console.log(device.deviceLocation);
   }
 
   const handleTextFieldChange = (event) => {
-    console.log(event.target.id);
-    console.log(event.target.value);
-    console.log(device);
+    //console.log(event.target.id);
+    //console.log(event.target.value);
+    //console.log(device);
     switch(event.target.id)
     {
       case "description":
@@ -113,7 +113,7 @@ const DeviceForm = (props) => {
   }
 
   async function handleSubmit() {
-    console.log('saving data');
+    //console.log('saving data');
 
     device.deviceLocation = deviceLocation;
 
@@ -128,8 +128,8 @@ const DeviceForm = (props) => {
 
     const contentLength = JSON.stringify(newDevice).length;
 
-    console.log(newDevice);
-    console.log(contentLength);
+    //console.log(newDevice);
+    //console.log(contentLength);
 
 
     await fetch('http://localhost:3000/api/devices/' + (props.mode === 'Add' ? '' : props.id) ,
@@ -147,7 +147,7 @@ const DeviceForm = (props) => {
     })
       .then((res) => res.text())
       .then((res) => {
-        console.log(res);        
+        //console.log(res);        
       }).catch((error) => {console.log(error);});
 
       props.setPage("MAIN_PAGE");
@@ -157,13 +157,13 @@ const DeviceForm = (props) => {
   const deviceEnergyRatings = ["A", "B", "C", "D", "E", "F", "G",""];
 
   const handleAutoCompleteChange = (event, value) => {
-    console.log(value);
+    //console.log(value);
     if (value !== '')
       setDeviceType(value);    
   }
 
   const handleInputAutoCompleteChange = (event, value) => {
-    console.log(value); 
+    //console.log(value); 
     if (value !== '')
     {   
       device.deviceType = value;
@@ -172,15 +172,15 @@ const DeviceForm = (props) => {
   };
 
   const handleDeviceEnergyRatingAutoCompleteChange = (event, value) => {
-    console.log('handleDeviceEnergyRatingAutoCompleteChange ' + value);
-    console.log(device.deviceEnergyRating);   
+    //console.log('handleDeviceEnergyRatingAutoCompleteChange ' + value);
+    //console.log(device.deviceEnergyRating);   
     if (value !== '')
       setDeviceEnergyRating(value);    
   }
 
   const handleDeviceEnergyRatingInputAutoCompleteChange = (event, value) => {
-    console.log('handleDeviceEnergyRatingInputAutoCompleteChange ' + value); 
-    console.log(device.deviceEnergyRating);   
+    //console.log('handleDeviceEnergyRatingInputAutoCompleteChange ' + value); 
+    //console.log(device.deviceEnergyRating);   
     if (value !== '')
     {
       device.deviceEnergyRating = value;
@@ -191,13 +191,13 @@ const DeviceForm = (props) => {
   async function handleDelete() {
     if (window.confirm('Are you sure you want to delete the device?'))
     {
-      console.log('deleteing data');
+      //console.log('deleteing data');
       
       await fetch('http://localhost:3000/api/devices/' + props.id,
       { method: 'DELETE', })
       .then((res) => res.text())
       .then((res) => {
-        console.log(res);        
+        //console.log(res);        
       }).catch((error) => {console.log(error);});
 
       props.setPage("MAIN_PAGE");
