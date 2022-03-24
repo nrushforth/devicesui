@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+##N.B. To run this locally you need to install CORS extension and set it up for localhost
+
 ## Available Scripts
 
 In the project directory, you can run:
